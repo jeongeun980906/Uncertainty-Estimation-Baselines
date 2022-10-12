@@ -12,9 +12,6 @@ from PIL import Image
 import os
 
 MNIST_NORMALIZATION = Normalize((0.1307,), (0.3081,))
-EVEN = [2*i for i in range(5)]
-ODD = [2*i+1 for i in range(5)]
-
 
 class MNIST(VisionDataset):
     """`MNIST <http://yann.lecun.com/exdb/mnist/>`_ Dataset.
@@ -71,8 +68,8 @@ class MNIST(VisionDataset):
 
     def __init__(
             self,
-            root: str, mode: str = 'all', # 'all', 'even', 'ood'
-            train: bool = True,
+            root: str,
+            train: bool = True, val=False,
             transform: Optional[Callable] = None,
             target_transform: Optional[Callable] = None,
             download: bool = False,
@@ -80,13 +77,7 @@ class MNIST(VisionDataset):
         super(MNIST, self).__init__(root, transform=transform,
                                     target_transform=target_transform)
         self.train = train  # training set or test set
-        self.mode = mode
-        if mode == 'evel':
-            self.class_name = torch.LongTensor(EVEN)
-        elif mode == 'odd':
-            self.class_name = torch.LongTensor(ODD)
-        else:
-            pass
+        self.val = val
         if self._check_legacy_exist():
             self.data, self.targets = self._load_legacy_data()
             return
@@ -121,22 +112,15 @@ class MNIST(VisionDataset):
 
         label_file = f"{'train' if self.train else 't10k'}-labels-idx1-ubyte"
         targets = read_label_file(os.path.join(self.raw_folder, label_file))
-        if self.mode == 'all':
-            return data, targets
+        total_ = len(data)
+        if self.train:
+            len_ = int(0.1*total_)
+            if self.val:
 
-        # for mode on only even or odd
-        index_set = []
-        for label in self.class_name:
-            idx = torch.where(targets == label.item())[0]
-            index_set.extend(idx)
-        index_set = torch.LongTensor(index_set)
-        targets = targets[index_set]
-        if self.mode == 'even':
-            targets = (targets-1)/2
-        elif self.mode == 'odd':
-            targets = (targets)/2
-
-        return data[index_set], targets
+                return data[-len_:], targets[-len_:]
+            else:
+                return data[:-len_], targets[:-len_]
+        return data, targets
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         """
