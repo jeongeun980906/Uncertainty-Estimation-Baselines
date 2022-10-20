@@ -1,6 +1,4 @@
-# Baseline for uncertainty estimation
-
-## On-Going Project 
+# Baseline for uncertainty estimation (On going)
 
 ## Supports
 - Deep Deterministic Uncertainty: A Simple Baseline (DDU)
