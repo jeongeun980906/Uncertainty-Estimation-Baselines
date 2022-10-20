@@ -2,6 +2,8 @@
 
 ## On-Going Project 
 
+- Virtual Outlier Exposure
+
 ## Supports
 - Deep Deterministic Uncertainty: A Simple Baseline (DDU)
     - [Paper](https://arxiv.org/abs/2102.11582)
@@ -13,8 +15,11 @@
     - [Paper](https://arxiv.org/abs/2106.09022)
 - Dropout Uncertainty
     - [Paper](https://www.nature.com/articles/s41598-017-17876-z)
-
-
+- Outlier Exposure
+    - [Paper](https://arxiv.org/pdf/1812.04606)
+- Energy-based OOD
+    - [Paper](https://arxiv.org/pdf/2010.03759)
+    
 ### Out-of-Distribution Detection
 
 In-Distribution Dataset: MNIST
