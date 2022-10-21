@@ -1,6 +1,8 @@
 # Baseline for uncertainty estimation (On going)
 
 ## Supports
+- Gaussian Process Classification
+    - [Gaussian Process for Machine Learning] 
 - Deep Deterministic Uncertainty: A Simple Baseline (DDU)
     - not with residual connection and spectral normalization
     - [Paper](https://arxiv.org/abs/2102.11582)
