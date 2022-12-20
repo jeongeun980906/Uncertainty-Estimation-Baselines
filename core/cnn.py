@@ -16,7 +16,8 @@ class simple_cnn(nn.Module):
                  y_dim      = 10,           # output dimension
                  USE_BN     = True,         # whether to use batch-norm
                  HEAD       = True,         # whether to use linear head
-                 DROPOUT    = False
+                 DROPOUT    = False,
+                 SN         = False
                  ):
         super(simple_cnn,self).__init__()
         self.x_dim      = x_dim
@@ -28,6 +29,7 @@ class simple_cnn(nn.Module):
         self.USE_BN     = USE_BN
         self.HEAD       = HEAD
         self.DROPOUT    = DROPOUT
+        self.USE_SN         = SN
         self.build_graph()
         self.init_param()
 
@@ -36,7 +38,18 @@ class simple_cnn(nn.Module):
         # Conv layers
         prev_c_dim = self.x_dim[0] # input channel 
         for (c_dim,p_size) in zip(self.c_dims,self.p_sizes):
-            self.layers.append(
+            if self.USE_SN:
+                self.layers.append(
+                    nn.utils.parametrizations.spectral_norm(nn.Conv2d(
+                    in_channels  = prev_c_dim,
+                    out_channels = c_dim,
+                    kernel_size  = self.k_size,
+                    stride       = (1,1),
+                    padding      = self.k_size//2
+                    ) # conv
+                ))
+            else:
+                self.layers.append(
                 nn.Conv2d(
                     in_channels  = prev_c_dim,
                     out_channels = c_dim,
